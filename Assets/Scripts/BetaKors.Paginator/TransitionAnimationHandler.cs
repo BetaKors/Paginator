@@ -11,7 +11,7 @@ namespace BetaKors.Paginator
 
         public TransitionAnimationHandler() { }
 
-        private IEnumerator EnlargeTransition(EnlargeParams parameters)
+        private IEnumerator Enlarge(EnlargeParams parameters)
         {
             var pTransform = Paginator.PreviousPage.Root.transform;
             var cTransform = Paginator.CurrentPage.Root.transform;
@@ -29,7 +29,7 @@ namespace BetaKors.Paginator
             pTransform.localScale = Vector3.one;
         }
 
-        private IEnumerator CrossfadeTransition(CrossfadeParams parameters)
+        private IEnumerator Crossfade(CrossfadeParams parameters)
         {
             Animate.Alpha(Paginator.PreviousPage.CanvasGroup, 1.0F, 0F, parameters.Duration).StartCoroutine(Paginator);
             Animate.Alpha(Paginator.CurrentPage.CanvasGroup, 0F, 1.0F, parameters.Duration).StartCoroutine(Paginator);
@@ -39,7 +39,7 @@ namespace BetaKors.Paginator
             Paginator.PreviousPage.CanvasGroup.alpha = 1.0F;
         }
 
-        private IEnumerator SwipeLeftTransition(SwipeLeftParams parameters)
+        private IEnumerator SwipeLeft(SwipeLeftParams parameters)
         {
             yield return Animate.Position(
                 Paginator.CurrentPage.Root.transform,

@@ -1,5 +1,4 @@
 using System.Collections;
-using BetaKors.Animation;
 using BetaKors.Extensions;
 using UnityEngine;
 
@@ -66,8 +65,8 @@ namespace BetaKors.Paginator
 
             if (animationType is not TransitionType.None)
             {
-                var name = System.Enum.GetName(typeof(TransitionType), animationType);
-                yield return transitionHandler.InvokeMethod($"{name}Transition", parameters);
+                var methodName = System.Enum.GetName(typeof(TransitionType), animationType);
+                yield return transitionHandler.InvokeMethod(methodName, parameters);
             }
 
             if (Paginator.PreviousPage is not null)
