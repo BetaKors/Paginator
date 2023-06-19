@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BetaKors
+namespace BetaKors.Core
 {
     public class Singleton<T> : MonoBehaviour where T : MonoBehaviour
     {

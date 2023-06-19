@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BetaKors
+namespace BetaKors.Core
 {
     public static class Utils
     {
