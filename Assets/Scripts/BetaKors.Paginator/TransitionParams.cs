@@ -1,40 +1,31 @@
+using BetaKors.Animation;
+using UnityEngine;
+
 namespace BetaKors.Paginator
 {
-    public class TransitionParams { }
+    public class TransitionParams
+    {
+        public EasingFunction EasingFunction { get; set; }
+    }
 
-    public class EnlargeParams : TransitionParams
+    public abstract class TransitionWithDurationParams : TransitionParams
+    {
+        public float Duration { get; set; }
+    }
+
+    public sealed class EnlargeTransitionParams : TransitionParams
     {
         public float SmallEnlargeAmount { get; set; }
         public float SmallEnlargeTime { get; set; }
         public float ShrinkTime { get; set; }
         public float BigEnlargeTime { get; set; }
-
-        public EnlargeParams(float smallEnlargeAmount, float smallEnlargeTime, float shrinkTime, float bigEnlargeTime)
-        {
-            SmallEnlargeAmount = smallEnlargeAmount;
-            SmallEnlargeTime = smallEnlargeTime;
-            ShrinkTime = shrinkTime;
-            BigEnlargeTime = bigEnlargeTime;
-        }
     }
 
-    public class CrossfadeParams : TransitionParams
+    public sealed class CrossfadeTransitionParams : TransitionWithDurationParams { }
+
+    public sealed class SwipeTransitionParams : TransitionWithDurationParams
     {
-        public float Duration { get; set; }
-
-        public CrossfadeParams(float duration)
-        {
-            Duration = duration;
-        }
-    }
-
-    public class SwipeLeftParams : TransitionParams
-    {
-        public float Duration { get; set; }
-
-        public SwipeLeftParams(float duration)
-        {
-            Duration = duration;
-        }
+        public SwipeDirection Direction { get; set; }
+        public Vector3 StartingPosition { get; set; }
     }
 }

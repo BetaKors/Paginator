@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BetaKors.Animation;
 using BetaKors.Core;
 using BetaKors.Extensions;
 using UnityEngine;
@@ -10,6 +11,8 @@ namespace BetaKors.Paginator
     {
         [field: SerializeField]
         public List<Book> Library { get; set; }
+
+        public List<Page> Pages => Library.SelectMany(b => b.Pages).ToList();
 
         public Vector3 PagesPosition => Canvas.transform.position;
 
@@ -49,15 +52,28 @@ namespace BetaKors.Paginator
             if (Input.GetKeyDown(KeyCode.K) && !IsMidTransition)
             {
                 var page = flattened[index++ % flattened.Count];
-                var parameters = new SwipeLeftParams(0.3f);
-                var coro = page.TransitionTo(TransitionType.SwipeLeft, parameters);
+
+                var parameters = new SwipeTransitionParams
+                {
+                    Direction = SwipeDirection.Up,
+                    EasingFunction = EasingFunction.BounceOut,
+                    Duration = 0.3f
+                };
+
+                var coro = page.TransitionTo(parameters);
+
                 StartCoroutine(coro);
             }
         }
 
         public Book FindBookByName(string name)
         {
-            return Library.First(book => book.name.ToLower().StartsWith(name.ToLower()));
+            return Library.First(book => book.Name.ToLower().StartsWith(name.ToLower()));
+        }
+
+        public Page FindPageByName(string name)
+        {
+            return Pages.First(page => page.Name.ToLower().StartsWith(name.ToLower()));
         }
     }
 }

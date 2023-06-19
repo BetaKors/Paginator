@@ -7,7 +7,12 @@ namespace BetaKors.Paginator
     public sealed class Page
     {
         public GameObject Root { get; private set; }
+
+        public Transform Transform => Root.transform;
+        public RectTransform RectTransform => Transform as RectTransform;
+
         public CanvasGroup CanvasGroup { get; private set; }
+
         public Book Book { get; private set; }
 
         public string Name { get; private set; }
@@ -40,10 +45,10 @@ namespace BetaKors.Paginator
 
         public IEnumerator TransitionTo()
         {
-            yield return TransitionTo(TransitionType.None, null);
+            yield return TransitionTo(null);
         }
 
-        public IEnumerator TransitionTo(TransitionType animationType, TransitionParams parameters)
+        public IEnumerator TransitionTo(TransitionParams transitionParams)
         {
             if (this == Paginator.CurrentPage) yield break;
 
@@ -54,8 +59,11 @@ namespace BetaKors.Paginator
             Paginator.PreviousPage = Paginator.CurrentPage;
             Paginator.CurrentPage = this;
 
+            Paginator.CurrentPage.Transform.SetAsFirstSibling();
+
             if (Paginator.PreviousPage is not null)
             {
+                Paginator.PreviousPage.Transform.SetAsFirstSibling();
                 Paginator.PreviousPage.Interactable = false;
             }
 
@@ -63,10 +71,10 @@ namespace BetaKors.Paginator
 
             Active = true;
 
-            if (animationType is not TransitionType.None)
+            if (transitionParams is not null)
             {
-                var methodName = System.Enum.GetName(typeof(TransitionType), animationType);
-                yield return transitionHandler.InvokeMethod(methodName, parameters);
+                var methodName = transitionParams.GetType().Name.Replace("TransitionParams", "");
+                yield return transitionHandler.InvokeMethod(methodName, transitionParams);
             }
 
             if (Paginator.PreviousPage is not null)

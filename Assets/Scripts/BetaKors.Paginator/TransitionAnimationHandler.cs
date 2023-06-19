@@ -1,5 +1,6 @@
 using System.Collections;
 using BetaKors.Animation;
+using BetaKors.Core;
 using BetaKors.Extensions;
 using UnityEngine;
 
@@ -11,16 +12,36 @@ namespace BetaKors.Paginator
 
         public TransitionAnimationHandler() { }
 
-        private IEnumerator Enlarge(EnlargeParams parameters)
+        private IEnumerator Enlarge(EnlargeTransitionParams parameters)
         {
-            var pTransform = Paginator.PreviousPage.Root.transform;
-            var cTransform = Paginator.CurrentPage.Root.transform;
+            var pTransform = Paginator.PreviousPage.Transform;
+            var cTransform = Paginator.CurrentPage.Transform;
 
             cTransform.localScale = Vector3.zero;
 
-            var smallEnlarge = Animate.Scale(pTransform, Vector3.one, Vector3.one * parameters.SmallEnlargeAmount, parameters.SmallEnlargeTime);
-            var shrink = Animate.Scale(pTransform, Vector3.one, Vector3.zero, parameters.ShrinkTime);
-            var bigEnlarge = Animate.Scale(cTransform, Vector3.zero, Vector3.one, parameters.BigEnlargeTime);
+            var smallEnlarge = Animate.Scale(
+                pTransform,
+                Vector3.one,
+                Vector3.one * parameters.SmallEnlargeAmount,
+                parameters.SmallEnlargeTime,
+                parameters.EasingFunction
+            );
+
+            var shrink = Animate.Scale(
+                pTransform,
+                Vector3.one,
+                Vector3.zero,
+                parameters.ShrinkTime,
+                parameters.EasingFunction
+            );
+
+            var bigEnlarge = Animate.Scale(
+                cTransform,
+                Vector3.zero,
+                Vector3.one,
+                parameters.BigEnlargeTime,
+                parameters.EasingFunction
+            );
 
             yield return smallEnlarge.StartCoroutine(Paginator);
             yield return shrink.StartCoroutine(Paginator);
@@ -29,23 +50,50 @@ namespace BetaKors.Paginator
             pTransform.localScale = Vector3.one;
         }
 
-        private IEnumerator Crossfade(CrossfadeParams parameters)
+        private IEnumerator Crossfade(CrossfadeTransitionParams parameters)
         {
-            Animate.Alpha(Paginator.PreviousPage.CanvasGroup, 1.0F, 0F, parameters.Duration).StartCoroutine(Paginator);
-            Animate.Alpha(Paginator.CurrentPage.CanvasGroup, 0F, 1.0F, parameters.Duration).StartCoroutine(Paginator);
+            Animate.Alpha(
+                Paginator.PreviousPage.CanvasGroup,
+                1.0F,
+                0F,
+                parameters.Duration,
+                parameters.EasingFunction
+            ).StartCoroutine(Paginator);
+
+            Animate.Alpha(
+                Paginator.CurrentPage.CanvasGroup,
+                0F,
+                1.0F,
+                parameters.Duration,
+                parameters.EasingFunction
+            ).StartCoroutine(Paginator);
 
             yield return new WaitForSeconds(parameters.Duration);
 
             Paginator.PreviousPage.CanvasGroup.alpha = 1.0F;
         }
 
-        private IEnumerator SwipeLeft(SwipeLeftParams parameters)
+        private IEnumerator Swipe(SwipeTransitionParams parameters)
         {
+            var x = Paginator.CurrentPage.RectTransform.rect.xMax;
+            var y = Paginator.CurrentPage.RectTransform.rect.yMax;
+
+            var startPosition = parameters.Direction switch
+            {
+                SwipeDirection.Right => Paginator.PagesPosition.WithX(-x),
+                SwipeDirection.Left => Paginator.PagesPosition.WithX(x * 3F),
+                SwipeDirection.Up => Paginator.PagesPosition.WithY(-y),
+                SwipeDirection.Down => Paginator.PagesPosition.WithY(y * 3F),
+                SwipeDirection.Custom => parameters.StartingPosition,
+                _ => Vector3.zero
+            };
+
             yield return Animate.Position(
-                Paginator.CurrentPage.Root.transform,
-                Paginator.PagesPosition.WithX(Screen.width * 2F),
+                Paginator.CurrentPage.Transform,
+                startPosition,
                 Paginator.PagesPosition,
-                parameters.Duration
+                parameters.Duration,
+                parameters.EasingFunction
             ).StartCoroutine(Paginator);
         }
     }

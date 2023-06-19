@@ -13,6 +13,8 @@ namespace BetaKors.Paginator
 
         public List<Page> Pages => _pages;
 
+        public string Name => name;
+
         private List<Page> _pages = new();
 
         private Paginator Paginator => Paginator.Instance;
