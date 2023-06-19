@@ -4,21 +4,10 @@ namespace BetaKors.Extensions
 {
     public static class ObjectExtensions
     {
-        public static object InvokeMethod(this object obj, string methodName, object[] parameters)
+        public static object InvokeMethod(this object obj, string methodName, BindingFlags flags, params object[] parameters)
         {
-            var flags = BindingFlags.Instance | BindingFlags.NonPublic;
-            var meth = obj.GetType().GetMethod(methodName, flags);
-            return meth.Invoke(obj, parameters);
-        }
-
-        public static object InvokeMethod(this object obj, string methodName, object parameter)
-        {
-            return InvokeMethod(obj, methodName, new[] { parameter });
-        }
-
-        public static object InvokeMethod(this object obj, string methodName)
-        {
-            return InvokeMethod(obj, methodName, null);
+            var method = obj.GetType().GetMethod(methodName, flags);
+            return method.Invoke(obj, parameters);
         }
     }
 }

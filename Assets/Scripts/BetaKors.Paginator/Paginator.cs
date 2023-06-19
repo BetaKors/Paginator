@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using BetaKors.Animation;
 using BetaKors.Core;
 using BetaKors.Extensions;
 using UnityEngine;
@@ -24,9 +23,6 @@ namespace BetaKors.Paginator
 
         public bool IsMidTransition { get; internal set; }
 
-        private List<Page> flattened;
-        private int index = 1;
-
         void Start()
         {
             HandleSingleton();
@@ -43,27 +39,6 @@ namespace BetaKors.Paginator
             var page = Library.First(book => book.IsValid()).Pages.First();
 
             StartCoroutine(page.TransitionTo());
-
-            flattened = Library.SelectMany(b => b.Pages).ToList();
-        }
-
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.K) && !IsMidTransition)
-            {
-                var page = flattened[index++ % flattened.Count];
-
-                var parameters = new SwipeTransitionParams
-                {
-                    Direction = SwipeDirection.Up,
-                    EasingFunction = EasingFunction.BounceOut,
-                    Duration = 0.3f
-                };
-
-                var coro = page.TransitionTo(parameters);
-
-                StartCoroutine(coro);
-            }
         }
 
         public Book FindBookByName(string name)

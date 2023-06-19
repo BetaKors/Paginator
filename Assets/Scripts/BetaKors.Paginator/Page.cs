@@ -1,5 +1,7 @@
 using System.Collections;
+using System.Reflection;
 using BetaKors.Extensions;
+using BetaKors.Paginator.Transitions;
 using UnityEngine;
 
 namespace BetaKors.Paginator
@@ -29,8 +31,13 @@ namespace BetaKors.Paginator
             set => CanvasGroup.interactable = value;
         }
 
+        public void SetActive(bool value) => Active = value;
+
+        public void SetInteractable(bool value) => Interactable = value;
+
         private Paginator Paginator => Paginator.Instance;
-        private TransitionAnimationHandler transitionHandler = new();
+
+        private TransitionHandler transitionHandler = new();
 
         public Page(GameObject root, Book book) : this(root, book, root.name) { }
 
@@ -43,12 +50,7 @@ namespace BetaKors.Paginator
             Root.SetActive(false);
         }
 
-        public IEnumerator TransitionTo()
-        {
-            yield return TransitionTo(null);
-        }
-
-        public IEnumerator TransitionTo(TransitionParams transitionParams)
+        public IEnumerator TransitionTo(Transition transition = null)
         {
             if (this == Paginator.CurrentPage) yield break;
 
@@ -61,27 +63,23 @@ namespace BetaKors.Paginator
 
             Paginator.CurrentPage.Transform.SetAsFirstSibling();
 
-            if (Paginator.PreviousPage is not null)
-            {
-                Paginator.PreviousPage.Transform.SetAsFirstSibling();
-                Paginator.PreviousPage.Interactable = false;
-            }
+            Paginator.PreviousPage?.Transform.SetAsFirstSibling();
+            Paginator.PreviousPage?.SetInteractable(false);
 
             Interactable = false;
-
             Active = true;
 
-            if (transitionParams is not null)
+            if (transition is not null)
             {
-                var methodName = transitionParams.GetType().Name.Replace("TransitionParams", "");
-                yield return transitionHandler.InvokeMethod(methodName, transitionParams);
+                yield return transitionHandler.InvokeMethod(
+                    transition.Name,
+                    BindingFlags.Static | BindingFlags.NonPublic,
+                    transition
+                );
             }
 
-            if (Paginator.PreviousPage is not null)
-            {
-                Paginator.PreviousPage.Interactable = true;
-                Paginator.PreviousPage.Active = false;
-            }
+            Paginator.PreviousPage?.SetInteractable(true);
+            Paginator.PreviousPage?.SetActive(false);
 
             Interactable = true;
 

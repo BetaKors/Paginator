@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
-using System.Reflection;
 using BetaKors.Extensions;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace BetaKors.Animation
 {
+    using EasingFunction = Func<float, float>;
+
     public static class Animate
     {
         public static IEnumerator Position(Transform target, Vector3 a, Vector3 b, float duration, EasingFunction easingFunction)
@@ -70,27 +71,17 @@ namespace BetaKors.Animation
             );
         }
 
-        public static IEnumerator Function(Action<float> function, float duration, EasingFunction easingFunction = EasingFunction.Linear, float startingT = 0f)
+        public static IEnumerator Function(Action<float> function, float duration, EasingFunction easingFunction, float startingT = 0f)
         {
-            var actualEasingFunc = GetEasingFunction(easingFunction);
-
             for (float t = startingT; t <= duration; t += Time.deltaTime)
             {
-                function(actualEasingFunc(t / duration));
+                function(easingFunction(t / duration));
                 yield return null;
             }
 
             /* the for loop above doesn't guarantee that function will be called
                with a value of 1.0F, so i'm ensuring it is going to be here. */
-            function(actualEasingFunc(1.0F));
-        }
-
-        private static Func<float, float> GetEasingFunction(EasingFunction easingFunction)
-        {
-            var name = Enum.GetName(easingFunction.GetType(), easingFunction);
-            var flags = BindingFlags.Public | BindingFlags.Static;
-            var property = typeof(EasingFunctions).GetProperty(name, flags);
-            return property.GetValue(null) as Func<float, float>;
+            function(easingFunction(1.0F));
         }
     }
 }

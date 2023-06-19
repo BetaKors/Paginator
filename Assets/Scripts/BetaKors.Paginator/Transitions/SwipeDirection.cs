@@ -1,4 +1,4 @@
-namespace BetaKors.Paginator
+namespace BetaKors.Paginator.Transitions
 {
     public enum SwipeDirection
     {

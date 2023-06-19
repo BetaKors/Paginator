@@ -1,18 +1,15 @@
 using System.Collections;
 using BetaKors.Animation;
-using BetaKors.Core;
 using BetaKors.Extensions;
 using UnityEngine;
 
-namespace BetaKors.Paginator
+namespace BetaKors.Paginator.Transitions
 {
-    public class TransitionAnimationHandler
+    public class TransitionHandler
     {
-        private Paginator Paginator => Paginator.Instance;
+        private static Paginator Paginator => Paginator.Instance;
 
-        public TransitionAnimationHandler() { }
-
-        private IEnumerator Enlarge(EnlargeTransitionParams parameters)
+        private static IEnumerator Enlarge(EnlargeTransition parameters)
         {
             var pTransform = Paginator.PreviousPage.Transform;
             var cTransform = Paginator.CurrentPage.Transform;
@@ -50,7 +47,7 @@ namespace BetaKors.Paginator
             pTransform.localScale = Vector3.one;
         }
 
-        private IEnumerator Crossfade(CrossfadeTransitionParams parameters)
+        private static IEnumerator Crossfade(CrossfadeTransition parameters)
         {
             Animate.Alpha(
                 Paginator.PreviousPage.CanvasGroup,
@@ -73,7 +70,7 @@ namespace BetaKors.Paginator
             Paginator.PreviousPage.CanvasGroup.alpha = 1.0F;
         }
 
-        private IEnumerator Swipe(SwipeTransitionParams parameters)
+        private static IEnumerator Swipe(SwipeTransition parameters)
         {
             var x = Paginator.CurrentPage.RectTransform.rect.xMax;
             var y = Paginator.CurrentPage.RectTransform.rect.yMax;
