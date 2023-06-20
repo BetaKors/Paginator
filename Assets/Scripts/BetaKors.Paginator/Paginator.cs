@@ -6,6 +6,7 @@ using UnityEngine;
 
 namespace BetaKors.Paginator
 {
+    /* not static to avoid headaches */
     public sealed class Paginator : Singleton<Paginator>
     {
         [field: SerializeField]

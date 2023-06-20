@@ -8,21 +8,20 @@ namespace BetaKors.Paginator.Tests
     {
         private Paginator Paginator => Paginator.Instance;
 
-        private int index;
+        private int _index;
 
         void Update()
         {
             if (Input.GetKeyDown(KeyCode.K) && !Paginator.IsMidTransition)
             {
-                index = (index + 1) % Paginator.Pages.Count;
+                _index = (_index + 1) % Paginator.Pages.Count;
 
-                var page = Paginator.Pages[index];
+                var page = Paginator.Pages[_index];
 
-                var transition = new SwipeTransition
+                var transition = new SlideTransition
                 {
-                    EasingFunction = EasingFunctions.BounceOut,
-                    Direction = (SwipeDirection)index,
-                    Duration = 0.3f,
+                    EasingFunction = EasingFunctions.CubicIn,
+                    Duration = 0.5F,
                 };
 
                 StartCoroutine(

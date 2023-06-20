@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BetaKors.Animation
 {
-    // from: https://easings.net
+    /* from: https://easings.net */
     public static class EasingFunctions
     {
         public static Func<float, float> Linear => x => x;

@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 655a5255910370e48ab5a16cd3d08709, type: 3}
   m_Name: Book2
   m_EditorClassIdentifier: 
-  pages:
+  <GameObjects>k__BackingField:
   - {fileID: 2039793485886133709, guid: 1f51a05b98d9a46429e4d87a6ff67ab0, type: 3}
   - {fileID: 4685470881789384261, guid: d5e2df548fc49e542a6988958962b400, type: 3}

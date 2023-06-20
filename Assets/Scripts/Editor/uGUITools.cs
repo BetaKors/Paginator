@@ -2,8 +2,8 @@
 using UnityEditor;
 using UnityEngine;
 
-// Adapted by BetaKors. Originally authored by Senshi.
-// Download: https://forum.unity.com/attachments/uguitools-cs.110408
+/* Adapted by BetaKors. Originally authored by Senshi.
+   Download: https://forum.unity.com/attachments/uguitools-cs.110408 */
 #pragma warning disable IDE1006
 public class uGUITools : MonoBehaviour
 #pragma warning restore IDE1006

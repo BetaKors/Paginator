@@ -47,6 +47,55 @@ namespace BetaKors.Paginator.Transitions
             pTransform.localScale = Vector3.one;
         }
 
+        private static IEnumerator Slide(SlideTransition parameters)
+        {
+            var cRect = Paginator.CurrentPage.RectTransform.rect;
+            var pRect = Paginator.CurrentPage.RectTransform.rect;
+
+            var bottomLeftCorner = cRect.min;
+            var topLeftCorner = cRect.max;
+
+            Animate.Function(
+                t => cRect.min = Vector3.Lerp(bottomLeftCorner, topLeftCorner, t).WithY(cRect.min.y),
+                parameters.Duration,
+                parameters.EasingFunction
+            ).StartCoroutine(Paginator);
+
+            Animate.Function(
+                t => pRect.max = Vector3.Lerp(topLeftCorner, bottomLeftCorner, t).WithY(pRect.min.y),
+                parameters.Duration,
+                parameters.EasingFunction
+            ).StartCoroutine(Paginator);
+
+            yield return new WaitForSeconds(parameters.Duration);
+
+            Paginator.PreviousPage.Transform.position = Paginator.PagesPosition;
+        }
+
+        private static IEnumerator SwitchWindows(SwitchWindowsTransition parameters)
+        {
+            Animate.Position(
+                Paginator.PreviousPage.Transform,
+                Paginator.PreviousPage.Transform.position,
+                parameters.TargetPositionFactory(),
+                parameters.Duration,
+                parameters.EasingFunction
+            ).StartCoroutine(Paginator);
+
+            Animate.Scale(
+                Paginator.PreviousPage.Transform,
+                Vector3.one,
+                Vector3.zero,
+                parameters.Duration,
+                parameters.EasingFunction
+            ).StartCoroutine(Paginator);
+
+            yield return new WaitForSeconds(parameters.Duration);
+
+            Paginator.PreviousPage.Transform.position = Paginator.PagesPosition;
+            Paginator.PreviousPage.Transform.localScale = Vector3.one;
+        }
+
         private static IEnumerator Crossfade(CrossfadeTransition parameters)
         {
             Animate.Alpha(
@@ -72,22 +121,9 @@ namespace BetaKors.Paginator.Transitions
 
         private static IEnumerator Swipe(SwipeTransition parameters)
         {
-            var x = Paginator.CurrentPage.RectTransform.rect.xMax;
-            var y = Paginator.CurrentPage.RectTransform.rect.yMax;
-
-            var startPosition = parameters.Direction switch
-            {
-                SwipeDirection.Right => Paginator.PagesPosition.WithX(-x),
-                SwipeDirection.Left => Paginator.PagesPosition.WithX(x * 3F),
-                SwipeDirection.Up => Paginator.PagesPosition.WithY(-y),
-                SwipeDirection.Down => Paginator.PagesPosition.WithY(y * 3F),
-                SwipeDirection.Custom => parameters.StartingPosition,
-                _ => Vector3.zero
-            };
-
             yield return Animate.Position(
                 Paginator.CurrentPage.Transform,
-                startPosition,
+                parameters.StartingPositionFactory(parameters.Direction),
                 Paginator.PagesPosition,
                 parameters.Duration,
                 parameters.EasingFunction

@@ -10,16 +10,16 @@ namespace BetaKors.Paginator
     {
         public List<Page> Pages { get; private set; } = new();
 
-        public string Name => name;
+        [field: SerializeField]
+        public List<GameObject> GameObjects { get; private set; } = new();
 
-        [SerializeField]
-        private List<GameObject> pages;
+        public string Name => name;
 
         private Paginator Paginator => Paginator.Instance;
 
         public void Init()
         {
-            foreach (var prefab in pages)
+            foreach (var prefab in GameObjects)
             {
                 var obj = Instantiate(
                     prefab,
@@ -28,10 +28,17 @@ namespace BetaKors.Paginator
                     Paginator.Canvas.transform
                 );
 
-                Pages.Add(new Page(obj, this));
+                AddPage(obj);
 
                 prefab.SetActive(false);
             }
+        }
+
+        public Page AddPage(GameObject obj)
+        {
+            var page = new Page(obj, this);
+            Pages.Add(page);
+            return page;
         }
 
         public Page FindPageByName(string pageName)
