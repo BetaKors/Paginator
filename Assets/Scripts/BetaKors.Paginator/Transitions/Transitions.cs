@@ -12,7 +12,7 @@ namespace BetaKors.Paginator.Transitions
         public virtual string Name => GetType().Name.Remove("Transition");
     }
 
-    public abstract class TransitionWithDuration : Transition
+    public class TransitionWithDuration : Transition
     {
         public float Duration { get; set; }
     }

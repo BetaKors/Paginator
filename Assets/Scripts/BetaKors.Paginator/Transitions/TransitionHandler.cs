@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BetaKors.Paginator.Transitions
 {
-    public class TransitionHandler
+    internal static class TransitionHandler
     {
         private static Paginator Paginator => Paginator.Instance;
 

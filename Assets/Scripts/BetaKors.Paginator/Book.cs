@@ -8,14 +8,12 @@ namespace BetaKors.Paginator
     [CreateAssetMenu(fileName = "Book", menuName = "Paginator/Book")]
     public sealed class Book : ScriptableObject
     {
-        [SerializeField]
-        private List<GameObject> pages;
-
-        public List<Page> Pages => _pages;
+        public List<Page> Pages { get; private set; } = new();
 
         public string Name => name;
 
-        private List<Page> _pages = new();
+        [SerializeField]
+        private List<GameObject> pages;
 
         private Paginator Paginator => Paginator.Instance;
 
@@ -30,7 +28,9 @@ namespace BetaKors.Paginator
                     Paginator.Canvas.transform
                 );
 
-                _pages.Add(new Page(obj, this));
+                Pages.Add(new Page(obj, this));
+
+                prefab.SetActive(false);
             }
         }
 

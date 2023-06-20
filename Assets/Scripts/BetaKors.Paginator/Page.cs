@@ -31,13 +31,7 @@ namespace BetaKors.Paginator
             set => CanvasGroup.interactable = value;
         }
 
-        public void SetActive(bool value) => Active = value;
-
-        public void SetInteractable(bool value) => Interactable = value;
-
         private Paginator Paginator => Paginator.Instance;
-
-        private TransitionHandler transitionHandler = new();
 
         public Page(GameObject root, Book book) : this(root, book, root.name) { }
 
@@ -47,7 +41,6 @@ namespace BetaKors.Paginator
             CanvasGroup = Root.GetComponent<CanvasGroup>();
             Book = book;
             Name = name;
-            Root.SetActive(false);
         }
 
         public IEnumerator TransitionTo(Transition transition = null)
@@ -71,7 +64,7 @@ namespace BetaKors.Paginator
 
             if (transition is not null)
             {
-                yield return transitionHandler.InvokeMethod(
+                yield return typeof(TransitionHandler).InvokeMethod(
                     transition.Name,
                     BindingFlags.Static | BindingFlags.NonPublic,
                     transition
@@ -84,6 +77,16 @@ namespace BetaKors.Paginator
             Interactable = true;
 
             Paginator.IsMidTransition = false;
+        }
+
+        public void SetActive(bool value)
+        {
+            Active = value;
+        }
+
+        public void SetInteractable(bool value)
+        {
+            Interactable = value;
         }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BetaKors.Paginator.Tests
 {
-    public class FlippingThroughPages : MonoBehaviour
+    internal class FlippingThroughPages : MonoBehaviour
     {
         private Paginator Paginator => Paginator.Instance;
 
@@ -20,7 +20,7 @@ namespace BetaKors.Paginator.Tests
 
                 var transition = new SwipeTransition
                 {
-                    EasingFunction = EasingFunctions.CubicInOut,
+                    EasingFunction = EasingFunctions.BounceOut,
                     Direction = (SwipeDirection)index,
                     Duration = 0.3f,
                 };
