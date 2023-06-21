@@ -16,9 +16,7 @@ namespace BetaKors.Paginator.Tests
         {
             if (Input.GetKeyDown(KeyCode.K) && !Paginator.IsMidTransition)
             {
-                _index = (_index + 1) % Paginator.Pages.Count;
-
-                var page = Paginator.Pages[_index];
+                var page = Paginator.Pages[_index++ % Paginator.Pages.Count];
 
                 var transition = new SlideTransition
                 {

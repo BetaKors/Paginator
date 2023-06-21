@@ -30,7 +30,7 @@ namespace BetaKors.Extensions
         public static T RandomElement<T>(this IEnumerable<T> enumerable)
         {
             var list = enumerable as IList<T> ?? enumerable.ToList();
-            return list.Count == 0 ? default : list[UnityEngine.Random.Range(0, list.Count)];
+            return list.Count == 0 ? default : list[Random.Range(0, list.Count)];
         }
 
         public static void ForEach<T>(this IEnumerable<T> source, System.Action<T> function)

@@ -1,4 +1,5 @@
 using System.Linq;
+using BetaKors.Extensions;
 using UnityEngine;
 
 namespace BetaKors.Core
@@ -26,6 +27,18 @@ namespace BetaKors.Core
         public static float Remap(float n, float start1, float stop1, float start2, float stop2)
         {
             return (n - start1) / (stop1 - start1) * (stop2 - start2) + start2;
+        }
+
+        public static void ClearChildren(Transform transform)
+        {
+            if (Application.isEditor)
+            {
+                transform.Cast<Transform>().ForEach(child => Object.DestroyImmediate(child.gameObject));
+            }
+            else
+            {
+                transform.Cast<Transform>().ForEach(child => Object.Destroy(child.gameObject));
+            }
         }
 
         public static Vector3 RandomPositionInsideBounds(Bounds bounds)

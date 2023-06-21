@@ -35,6 +35,8 @@ namespace BetaKors.Paginator
 
             Canvas = FindObjectOfType<Canvas>();
 
+            Utils.ClearChildren(Canvas.transform);
+
             Library.ForEach(book => book.Init());
 
             var page = Library.First(book => book.IsValid()).Pages.First();
