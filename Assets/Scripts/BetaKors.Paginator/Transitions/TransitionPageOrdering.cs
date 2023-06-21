@@ -1,6 +1,6 @@
 namespace BetaKors.Paginator.Transitions
 {
-    public enum TransitionType
+    public enum TransitionPageOrdering
     {
         CurrentAbovePrevious,
         PreviousAboveCurrent

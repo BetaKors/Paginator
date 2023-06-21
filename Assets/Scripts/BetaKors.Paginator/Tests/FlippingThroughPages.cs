@@ -1,4 +1,6 @@
 using BetaKors.Animation;
+using BetaKors.Core;
+using BetaKors.Extensions;
 using BetaKors.Paginator.Transitions;
 using UnityEngine;
 
@@ -20,13 +22,12 @@ namespace BetaKors.Paginator.Tests
 
                 var transition = new SlideTransition
                 {
-                    EasingFunction = EasingFunctions.CubicIn,
-                    Duration = 0.5F,
+                    Direction = Utils.RandomFromEnum<Direction>(),
+                    EasingFunction = EasingFunctions.BounceOut,
+                    Duration = 0.2F,
                 };
 
-                StartCoroutine(
-                    page.TransitionTo(transition)
-                );
+                page.TransitionTo(transition).StartCoroutine(this);
             }
         }
     }

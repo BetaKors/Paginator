@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 namespace BetaKors.Core
@@ -14,6 +15,12 @@ namespace BetaKors.Core
                 ((rgb >> 8) & 0xff) / 255.0F,
                 ((rgb) & 0xff) / 255.0F
             );
+        }
+
+        public static T RandomFromEnum<T>()
+        {
+            var values = System.Enum.GetValues(typeof(T));
+            return (T)values.GetValue(Random.Range(0, values.Length));
         }
 
         public static float Remap(float n, float start1, float stop1, float start2, float stop2)

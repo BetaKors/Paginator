@@ -62,12 +62,7 @@ namespace BetaKors.Paginator
             if (transition is not null)
             {
                 HandlePageOrdering(transition);
-
-                yield return typeof(TransitionHandler).InvokeMethod(
-                    transition.Name,
-                    BindingFlags.Static | BindingFlags.NonPublic,
-                    transition
-                );
+                yield return transition.Execute();
             }
 
             Paginator.PreviousPage?.SetInteractable(true);
@@ -80,17 +75,10 @@ namespace BetaKors.Paginator
 
         private void HandlePageOrdering(Transition transition)
         {
-            var pageAbove = (
-                transition.Type is TransitionType.CurrentAbovePrevious ?
-                Paginator.CurrentPage :
-                Paginator.PreviousPage
-            );
+            var isCurrentAbovePrevious = transition.PageOrdering is TransitionPageOrdering.CurrentAbovePrevious;
 
-            var pageBelow = (
-                transition.Type is TransitionType.CurrentAbovePrevious ?
-                Paginator.PreviousPage :
-                Paginator.CurrentPage
-            );
+            var pageAbove = isCurrentAbovePrevious ? Paginator.CurrentPage : Paginator.PreviousPage;
+            var pageBelow = isCurrentAbovePrevious ? Paginator.PreviousPage : Paginator.CurrentPage;
 
             pageAbove?.Transform.SetAsFirstSibling();
             pageBelow?.Transform.SetAsFirstSibling();

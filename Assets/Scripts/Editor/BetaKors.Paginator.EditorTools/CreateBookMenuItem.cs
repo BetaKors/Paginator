@@ -38,8 +38,6 @@ namespace BetaKors.Paginator.EditorTools
                     Undo.AddComponent<CanvasGroup>(obj);
                 }
 
-                Undo.DestroyObjectImmediate(obj);
-
                 book.GameObjects.Add(prefab);
             }
 
