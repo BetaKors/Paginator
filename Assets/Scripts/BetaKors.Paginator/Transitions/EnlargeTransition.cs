@@ -12,7 +12,7 @@ namespace BetaKors.Paginator.Transitions
         public float ShrinkTime { get; set; } = 0.08F;
         public float BigEnlargeTime { get; set; } = 0.12F;
 
-        public override IEnumerator Execute()
+        internal override IEnumerator Execute()
         {
             var pTransform = Paginator.PreviousPage.Transform;
             var cTransform = Paginator.CurrentPage.Transform;

@@ -17,7 +17,7 @@ namespace BetaKors.Core
             );
         }
 
-        public static T RandomFromEnum<T>()
+        public static T RandomFromEnum<T>() where T : System.Enum
         {
             var values = System.Enum.GetValues(typeof(T));
             return (T)values.GetValue(Random.Range(0, values.Length));

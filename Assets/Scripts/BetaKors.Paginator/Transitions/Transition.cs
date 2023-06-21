@@ -12,6 +12,6 @@ namespace BetaKors.Paginator.Transitions
 
         protected static Paginator Paginator => Paginator.Instance;
 
-        public abstract IEnumerator Execute();
+        internal abstract IEnumerator Execute();
     }
 }

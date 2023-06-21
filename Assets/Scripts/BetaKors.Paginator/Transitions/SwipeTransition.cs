@@ -27,7 +27,7 @@ namespace BetaKors.Paginator.Transitions
 
         public float Duration { get; set; } = 1.0F;
 
-        public override IEnumerator Execute()
+        internal override IEnumerator Execute()
         {
             yield return Animate.Position(
                 Paginator.CurrentPage.Transform,

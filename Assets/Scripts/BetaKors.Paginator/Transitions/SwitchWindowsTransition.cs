@@ -20,7 +20,7 @@ namespace BetaKors.Paginator.Transitions
 
         protected internal override TransitionPageOrdering PageOrdering => TransitionPageOrdering.PreviousAboveCurrent;
 
-        public override IEnumerator Execute()
+        internal override IEnumerator Execute()
         {
             Animate.Position(
                 Paginator.PreviousPage.Transform,
